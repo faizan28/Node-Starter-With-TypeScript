@@ -1,0 +1,75 @@
+1)users/RegisterNewUser  (REST API) (POST METHOD)
+=>Function
+RegisterNewUser
+=>params
+UDID: {
+        type: Number,
+        required:true
+    },
+    UserId: {   //UNIQUE ID
+        type: Number,
+        required:true
+    },
+    UserType: {
+        type: Number,
+    },
+    Token: {
+        type: String,
+        required:true
+    },
+	
+	Collection =User.findOneAndUpdate(UserId)
+	
+2) users/LoadChannels REST API) (GET METHOD)
+Example:http://localhost:3000/users/LoadChannels?UserId=169
+=>Function
+GetChannelsByUserId
+=>Query params
+UserId
+=>Functionality
+Get Channel List By User Id from ChannelSchema
+Get Count Messages By Channel Name From ConversationSchema
+
+Return {ChannelList} and {Lastmessage,Count}
+
+
+3  users/LoadMessage (REST API) (GET METHOD)
+Example:http://localhost:3000/users/LoadMessage?ChannelName=339:EfficiencyLiveTracking121:169
+=>Function
+LoadMessageByChannel
+=>Query params
+ChannelName
+=>Functionality
+Get Messages by ChannelName
+Return {MessageList}
+
+
+
+SOCKET
+
+Front
+1)Emit  subscribe:channel ChannelName,
+(SenderName&ReciverName) Required for Data
+Example  subscribe:channel,450:EfficiencyLiveTracking121:850
+
+Insert into Channels with participants
+
+2) Emit io:sendmessageagent ,MessageData
+	MessageId:String   (generted By FrontEnd)
+    MessageBody: String,
+    CreatedAt:Date,
+    SourceUserName: String,
+    SourceId: Number,
+    SourceUserImage: String,
+    IsMedia: boolean,
+    MediaURL: [],
+    ConverstationChannel: String,
+    MessageType: Number,
+    MessageDeliveredStatus:Number,
+    MessageStatusType: Number
+
+
+
+
+
+
