@@ -1,23 +1,24 @@
-import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
-import { Response, Request, NextFunction } from 'express';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
-export class JsonWebToken {
-    public SecretKey = process.env.JWTSECRETKEY || '';
-    signToken(Payload:any) {
+class JsonWebToken {
+    constructor() {
+        this.SecretKey = process.env.JWTSECRETKEY || '';
+    }
+    signToken(Payload) {
         return jwt.sign({
             iss: 'CodeWorker',
             sub: Payload,
             iat: new Date().getTime(),
             exp: new Date().setDate(new Date().getDate() + 1)
-        }, this.SecretKey)
+        }, this.SecretKey);
     }
-
-
-    public jwtSign(req:any, res:any) {
+    jwtSign(req, res) {
         let payLoad = {
             id: 245
-        }
+        };
         const token = this.signToken(payLoad);
         res.json({
             token
@@ -28,16 +29,17 @@ export class JsonWebToken {
         //     });
         // })
     }
-    public verifyToken(req:any, res: Response, next: NextFunction) {
+    verifyToken(req, res, next) {
         const bearerHeader = req.headers['authorization'];
         if (typeof bearerHeader !== 'undefined') {
             const bearer = bearerHeader.split(' ');
             const bearerToken = bearer[1];
             req.token = bearerToken;
             next();
-        } else {
-            res.sendStatus(403)
+        }
+        else {
+            res.sendStatus(403);
         }
     }
-
 }
+exports.JsonWebToken = JsonWebToken;

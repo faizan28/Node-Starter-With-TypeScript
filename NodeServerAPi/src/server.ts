@@ -1,6 +1,6 @@
 import { ChatSocket } from './Socket/socket';
-import express from 'express';
-import dotenv from 'dotenv';
+import * as express from 'express';
+import * as dotenv from 'dotenv';
 import { JsonWebToken } from './config/appjwt';
 import { router as UsersRoute } from './routes/usersRoutes';
 import { router as AdminRoute } from './routes/adminRoutes';
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let _JsonWebToken = new JsonWebToken();
 let mongoUrl: string = 'mongodb://localhost/ChatEfficiency';
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoUrl, { useNewUrlParser: true,useUnifiedTopology:true,useFindAndModify: false },(err=>{
+mongoose.connect(mongoUrl, { useNewUrlParser: true,useUnifiedTopology:true,useFindAndModify: false },((err:any)=>{
   if(err){
     console.log('Mongo Error=>',err)
   }
@@ -24,7 +24,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true,useUnifiedTopology:true,useFi
 }));
 app.use('/users', UsersRoute);
 app.use('/admin', _JsonWebToken.verifyToken, AdminRoute);
-app.get('/', (req, res) => {
+app.get('/', (req:any, res:any) => {
   res.json({
     message: 'The sedulous hyena ate the antelope!'
   });

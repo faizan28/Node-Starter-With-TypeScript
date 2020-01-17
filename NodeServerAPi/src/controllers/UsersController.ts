@@ -6,7 +6,7 @@ import * as mongoose from 'mongoose';
 import { Request } from 'express';
 
 const User = mongoose.model('User', UserSchema);
-export async function SignIn(req, res, next) {
+export async function SignIn(req:any, res:any, next:any) {
     try {
         res.json({
             Message: "SignInHere"
@@ -16,7 +16,7 @@ export async function SignIn(req, res, next) {
         next(err);
     }
 }
-export async function RegisterNewUser(req, res, next) {
+export async function RegisterNewUser(req:any, res:any, next:any) {
     try {
         User.findOneAndUpdate({ UserId: req.body.UserId }, req.body, { new: true ,upsert:true}, (err, contact) => {
             if(err){
@@ -31,7 +31,7 @@ export async function RegisterNewUser(req, res, next) {
         next(err);
     }
 }
-export async function GetChannelsByUserId(req:Request, res, next) {
+export async function GetChannelsByUserId(req:any, res:any, next:any) {
     try {
         let Params = req.query;
         if(Params){
@@ -51,13 +51,15 @@ export async function GetChannelsByUserId(req:Request, res, next) {
     }
 }
 
-export async function LoadMessageByChannel(req:Request, res, next) {
+export async function LoadMessageByChannel(req:Request, res:any, next:any) {
     try {
         let Params = req.query;
         if(Params){
             let ChannelName = Params.ChannelName;
+            let UserId = Params.UserId;
             let Channel = new ConversationClass();
             let MessageList = await Channel.LoadMessagesByChannelName(ChannelName);
+            Channel.markAllReadMessages(ChannelName,UserId);
             res.send(MessageList);
         }
         else{

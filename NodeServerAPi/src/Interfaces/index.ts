@@ -25,3 +25,15 @@ export interface MessageObj{
     MessageDeliveredStatus:Number,
     MessageStatusType: Number
 }
+export interface IParticipants{
+    UserId: Number,
+    UserName: String
+}
+export interface LoadChannelObj{
+        _id: String,
+        Channel: String,
+        Participants: IParticipants[],
+        createdAt: String,
+        updatedAt: String,
+        SourceInfo:{}
+} 

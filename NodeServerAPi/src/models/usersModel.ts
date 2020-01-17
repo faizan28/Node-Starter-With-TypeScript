@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema;
 
 export const UserSchema = new Schema({
     UDID: {
-        type: Number,
+        type: String,
         required:true
     },
     UserId: {

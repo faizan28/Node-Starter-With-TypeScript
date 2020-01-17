@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 
-export async function Dashboard(req, res, next) {
+export async function Dashboard(req:Request, res:Response, next:NextFunction) {
     try {
         res.json({
            Message: "Welcome To DashBoard"

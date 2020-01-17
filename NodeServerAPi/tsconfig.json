@@ -1,19 +1,39 @@
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",
+//     "esModuleInterop": true,
+//     "target": "es2018",
+//     // "moduleResolution": "node",
+//     "sourceMap": true,
+//     "outDir": "dist",
+//     "typeRoots" : ["./node_modules/@types", "./typings"]
+//   },
+//   "lib": ["es6"],
+//   "include": [
+//     "src/**/**.ts"
+//    ],
+//   "exclude": [
+//     "node_modules",
+//     "firefunctions"
+//    ]
+// }
+
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "target": "es6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "dist",
-    "typeRoots" : ["./node_modules/@types", "./typings"]
+    "target": "es2018", //default is es5
+    "outDir": "dist", //change the output directory
+    //"baseUrl": "./src",
+    "module": "commonjs", //CommonJs style module in output
+    "declaration": true,
+    "resolveJsonModule": true, //to import out json database
+    //"moduleResolution": "node"
+    "strict": true
   },
-  "lib": ["es2015"],
+  "lib": ["dom", "es2015.promise", "es5"],
   "include": [
-    "src/**/**.ts"
-   ],
+    "src/**/*.ts" //which kind of files to compile
+  ],
   "exclude": [
-    "node_modules",
-    "firefunctions"
-   ]
+    "node_modules" //which files or directories to ignore
+  ]
 }

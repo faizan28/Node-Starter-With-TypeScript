@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Dashboard,AddPost } from "../controllers/AdminController";
-import passport from "passport";
+import * as passport from "passport";
 const passportConf = require('../config/passportConfig')
 let router = Router();
 router.get('/', Dashboard);

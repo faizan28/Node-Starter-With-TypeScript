@@ -1,12 +1,15 @@
-import { MessageDeliveryType } from './../enums/index';
-import { ChannelClass } from './ChannelController';
-import { ConversationSchema } from './../models/conversationsModel';
-import * as mongoose from 'mongoose';
-import { MessageObj } from '../Interfaces';
-export class ConversationClass {
-    _Channel = new ChannelClass();
-    public Conversation = mongoose.model('Conversation', ConversationSchema);
-    async MessagePush(messageObj: MessageObj) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("./../enums/index");
+const ChannelController_1 = require("./ChannelController");
+const conversationsModel_1 = require("./../models/conversationsModel");
+const mongoose = require("mongoose");
+class ConversationClass {
+    constructor() {
+        this._Channel = new ChannelController_1.ChannelClass();
+        this.Conversation = mongoose.model('Conversation', conversationsModel_1.ConversationSchema);
+    }
+    async MessagePush(messageObj) {
         try {
             if (messageObj) {
                 let channelname = messageObj.ConverstationChannel;
@@ -14,7 +17,7 @@ export class ConversationClass {
                 // console.log('ChannelId=>', ChannelId);
                 if (ChannelId != null) {
                     // console.log('InserDb')
-                    this.insertMSGinDB(ChannelId, messageObj)
+                    this.insertMSGinDB(ChannelId, messageObj);
                 }
             }
             // this._Channel.getChannelIdbyChannelName(channel).then(data=>{
@@ -22,62 +25,62 @@ export class ConversationClass {
             // }).catch(err=>{
             //     console.log('err=>',err);
             // })
-        } catch (error) {
+        }
+        catch (error) {
             console.log('error=>', error);
         }
     }
-    insertMSGinDB(ChannelId: any, messageObj: MessageObj) {
-        this.Conversation.findOneAndUpdate(
-            { ChannelId: ChannelId },
-            {
-                ChannelName: messageObj.ConverstationChannel,
-                $push: {
-                    Messages: [
-                        messageObj
-                    ]
-                }
-            }, { new: true, upsert: true }, (err, data) => {
-                if (err) {
-                    console.log('err=>', err);
-                }
-                // console.log('data=>', data);
-            });
+    insertMSGinDB(ChannelId, messageObj) {
+        this.Conversation.findOneAndUpdate({ ChannelId: ChannelId }, {
+            ChannelName: messageObj.ConverstationChannel,
+            $push: {
+                Messages: [
+                    messageObj
+                ]
+            }
+        }, { new: true, upsert: true }, (err, data) => {
+            if (err) {
+                console.log('err=>', err);
+            }
+            // console.log('data=>', data);
+        });
     }
-    LoadMessagesByChannelName(ChannelName: any) {
-        return new Promise<any>((resolve, reject) => {
+    LoadMessagesByChannelName(ChannelName) {
+        return new Promise((resolve, reject) => {
             try {
                 this.Conversation.findOne({ ChannelName: ChannelName }, (err, res) => {
                     if (!err) {
-                        resolve(res)
+                        resolve(res);
                     }
                     else {
                         resolve(err);
                     }
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 reject(error);
             }
-
         });
     }
-    updateMessageDeliveredStatus(messageObj: MessageObj) {
+    updateMessageDeliveredStatus(messageObj) {
         try {
-            console.log('DelvierEntry=>', messageObj)
+            console.log('DelvierEntry=>', messageObj);
             this.Conversation.findOneAndUpdate({
                 "ChannelName": messageObj.ConverstationChannel,
                 "Messages.MessageId": messageObj.MessageId
             }, {
-                    "$set": {
-                        'Messages.$': messageObj
-                    }
-                }).exec((err, res) => {
-                    console.log('DeliverdRes=>', res);
-                });
-        } catch (error) {
+                "$set": {
+                    'Messages.$': messageObj
+                }
+            }).exec((err, res) => {
+                console.log('DeliverdRes=>', res);
+            });
+        }
+        catch (error) {
             console.log('Error Marking Delivered=>', error);
         }
     }
-    markAllReadMessages(ChannelName: any, UserId: any) {
+    markAllReadMessages(ChannelName, UserId) {
         try {
             let ChannelSplit = ChannelName.split(':');
             let SourceId = -1;
@@ -88,19 +91,17 @@ export class ConversationClass {
                 else {
                     SourceId = ChannelSplit[0];
                 }
-
                 console.log('ChannelName=>', ChannelName);
                 console.log('SourceId=>', SourceId);
-                this.Conversation.updateOne({"ChannelName":ChannelName}, {
+                this.Conversation.updateOne({ "ChannelName": ChannelName }, {
                     "$set": {
-                        "Messages.$[i].MessageDeliveredStatus": MessageDeliveryType.seen
+                        "Messages.$[i].MessageDeliveredStatus": index_1.MessageDeliveryType.seen
                     },
                 }, {
-                        arrayFilters: [{
+                    arrayFilters: [{
                             "i.SourceId": SourceId
                         }]
-                    }
-                ).exec((err, res) => {
+                }).exec((err, res) => {
                     if (!err) {
                         console.log('markAllReadMessages=>', res);
                     }
@@ -109,11 +110,13 @@ export class ConversationClass {
                     }
                 });
             }
-            else{
+            else {
                 console.log('markAllReadMessages:ERROR=>Channel Not Defined Properly');
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.log('ERROR:=>', error);
         }
     }
 }
+exports.ConversationClass = ConversationClass;
